@@ -1,0 +1,121 @@
+#include "bits/stdc++.h"
+#define SIZE          100005
+#define REM           1000000007
+#define PI            2*acos(0.0)
+#define PB            push_back
+#define MK            make_pair
+#define F 			  first
+#define S             second
+#define L             long
+#define LL            long long
+#define UL            unsigned long
+#define ULL           unsigned long long
+using namespace std;
+template <class T> inline T bigmod1(T p,T e,T M){
+    LL ret=1;
+    for(; e > 0; e >>= 1){
+ 
+        if(e & 1) ret = (ret * p) % M;
+        p = (p * p) % M;
+    } return (T)ret;
+}
+ 
+template <class T> inline T gcode(T a,T b){if(b==0)return a;return gcode(b,a%b);}
+template <class T> inline T modularinv(T a,T M){return bigmod1(a,M-2,M);}
+ 
+bool SA(const pair<string,string> &a, const pair<string,string> &b){
+   return a.second<b.second;
+}
+bool FA(const pair<string,string> &a, const pair<string,string> &b){
+   return a.first<b.first;
+}
+bool SD(const pair<LL,LL> &a, const pair<LL,LL> &b){
+   return a.second>b.second;
+}
+bool FD(const pair<int,int> &a, const pair<int,int> &b){
+   return a.first>b.first;
+}
+//int dirA[8]={0,0,1,-1,1,-1,1,-1};
+//int dirB[8]={1,-1,0,0,1,-1,-1,1};
+//int dirA[4]={0,0,1,-1};
+//int dirB[4]={1,-1,0,0};
+//int kingsA[8]={0,0,1,-1,-1,1,-1,1};  //Kings Move
+//int kingsB[8]={-1,1,0,0,1,1,-1,-1};  //Kings Move
+//int knightsA[8]={-2,-2,-1,-1,1,1,2,2};  //Knights Move
+//int knightsB[8]={-1,1,-2,2,-2,2,-1,1};  //Knights Move
+ 
+void Khela_Hobe(){
+   ios_base::sync_with_stdio(false);
+   cin.tie(NULL);
+}
+/*void Khela_Hok(){
+   freopen("a2.in","r",stdin);
+   freopen("myfile1.txt","w",stdout);
+}*/
+ 
+int ar[SIZE],tree[SIZE];
+void update(int idx,int x,int n){
+	while(idx<=n){
+		tree[idx]+=x;
+		idx+=idx&(-idx);
+	}
+}
+void updatee(int idx,int x,int n){
+	while(idx<=n){
+		tree[idx]-=x;
+		idx+=idx&(-idx);
+	}
+}
+LL solve(int idd){
+	LL sum=0;
+	while(idd>0){
+		sum+=tree[idd];
+		idd-=idd&(-idd);
+	}
+	return sum;
+}
+int main(){
+	//Khela_Hok();
+	Khela_Hobe();
+	int t,cas=1;
+	scanf("%d",&t);
+	while(t--){
+		for(int i=1;i<=SIZE;i++){
+			ar[i]=0;
+			tree[i]=0;
+		}
+		int a,b;
+		scanf("%d%d",&a,&b);
+		for(int i=1;i<=a;i++){
+			scanf("%d",&ar[i]);
+			update(i,ar[i],a);
+		}
+		printf("Case %d:\n",cas++);
+		while(b--){
+			int id;
+			scanf("%d",&id);
+			if(id==1){
+				int k;
+				scanf("%d",&k);
+				//cout<<tree[2]<<endl;
+				printf("%d\n",ar[k+1]);
+				int val=ar[k+1];
+				ar[k+1]=0;
+				updatee(k+1,val,a);
+			}
+			else if(id==2){
+				int k,kk;
+				scanf("%d%d",&k,&kk);
+				ar[k+1]+=kk;
+				update(k+1,kk,a);
+			}
+			else if(id==3){
+				int k,kk;
+				scanf("%d%d",&k,&kk);
+				int res=solve(kk+1)-solve(k);
+				printf("%d\n",res);
+			}
+		}
+	}
+	return 0;
+}
